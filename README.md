@@ -21,9 +21,9 @@ ArmozaChess es una plataforma de ajedrez en línea que permite a los usuarios ju
 
 # Configuración
 
-- git clone https://github.com/NicolasClos/chessAPI
+- git clone https://github.com/NicolasClos/pairingsbackend
 - npm install
-- Configurar Variables de Entorno: Crea un archivo .env en el directorio raíz del proyecto y configura las variables de entorno necesarias.
+- Configurar variables de entorno necesarias en .env
 - npm start
 - npm run dev
 
@@ -33,6 +33,6 @@ ArmozaChess es una plataforma de ajedrez en línea que permite a los usuarios ju
 
 # Contacto
 
-Si tienes alguna pregunta o sugerencia, no dudes en ponerte en contacto con nosotros en nicolasclosportfolio@gmail.com.
+Si tienes alguna pregunta o sugerencia, no dudes en ponerte en contacto con nosotros en contacto@nicolasclos.com.
 
 ¡Gracias por tu interés en ArmozaChess!
