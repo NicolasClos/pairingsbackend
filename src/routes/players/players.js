@@ -1,6 +1,7 @@
 import express from 'express';
 import DB from '../../models/model.js';
 import authMiddleware from '../../middlewares/authMiddleware.js';
+import sanitize from 'mongo-sanitize';
 
 const router = express.Router();
 
@@ -49,7 +50,8 @@ router.get('/:userId/players/:playerId', async (req, res) => {
 router.post('/:userId/players', async (req, res) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.params.userId);
-        if (!req.body.name || !req.body.surname) {
+        const reqBody = sanitize(req.body);
+        if (!reqBody.name || !reqBody.surname) {
             return res.status(400).json({ Error: 'Datos de jugador incompletos' });
         }
         const updatedUser = await DB.findOneAndUpdate(
@@ -121,7 +123,7 @@ router.put('/:userId/players/:playerId', async (req, res) => {
 router.put('/:userId/players', async (req, res) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.params.userId);
-        const playersToUpdate = req.body;
+        const playersToUpdate = sanitize(req.body);
         const user = await DB.findOne({ _id: userId });
         if (!user) {
             return res.status(404).json({ Error: 'Usuario no encontrado' });
@@ -143,8 +145,8 @@ router.post('/:userId/players/:playerId/changeFullname', async (req, res) => {
         const user = await DB.findOne({ _id: userId });
 
         const playerId = new mongoose.Types.ObjectId(req.params.playerId);
-        const newName = req.body.name;
-        const newSurname = req.body.surname;
+        const newName = sanitize(req.body.name);
+        const newSurname = sanitize(req.body.surname);
 
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });

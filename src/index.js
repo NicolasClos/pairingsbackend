@@ -4,7 +4,9 @@ import loginRouter from './routes/auth/login.js';
 import usersRouter from './routes/users/users.js';
 import playersRouter from './routes/players/players.js';
 import tournamentsRouter from './routes/tournaments/tournaments.js';
+import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import helmet from 'helmet'
 
 const app = express();
 
@@ -12,9 +14,16 @@ const WHITELIST = process.env.URL_WHITELIST;
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL;
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+
+app.use(limiter);
+app.use(helmet());
 app.use(cors({ origin: WHITELIST }));
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }))
 
 // Routes
 

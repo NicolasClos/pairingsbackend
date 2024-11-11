@@ -2,19 +2,19 @@ import express from 'express';
 import dotenv from 'dotenv';
 import DB from '../../models/model.js';
 import jwt from 'jsonwebtoken';
+import sanitize from 'mongo-sanitize';
 
 // Variables de entorno
 
 dotenv.config();
 const SECRET = process.env.SECRET;
-const EMAIL_WHITELIST_ENV = process.env.EMAIL_WHITELIST;
-const EMAIL_WHITELIST = EMAIL_WHITELIST_ENV ? EMAIL_WHITELIST_ENV.split(',') : [];
+const WHITELIST = process.env.EMAIL_WHITELIST ? process.env.EMAIL_WHITELIST.split(',') : [];
 
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
     try {
-        const { email, username } = req.body;
+        const { email, username } = sanitize(req.body);
 
         const token = jwt.sign(
             { email, username },
@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
             { expiresIn: '6h' }
         );
 
-        if (EMAIL_WHITELIST.length > 0 && !EMAIL_WHITELIST.includes(email)) {
+        if (WHITELIST.length > 0 && !WHITELIST.includes(email)) {
             console.error(`El email ${email} no es permitido`)
             return res.status(403).json({ error: 'Email no permitido' });
         }
